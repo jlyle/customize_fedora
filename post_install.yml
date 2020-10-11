@@ -1,0 +1,86 @@
+- hosts: localhost
+  tasks:
+    - name: Install Builder
+      become: yes
+      package:
+        name: gnome-builder
+        state: present   
+    - name: Remove Rhythmbox
+      become: yes
+      package:
+        name: rhythmbox
+        state: absent
+    - name: Install GNOME Music
+      become: yes
+      package:
+        name: gnome-music
+        state: present
+    - name: Remove Shotwell
+      become: yes
+      package:
+        name: shotwell
+        state: absent
+    - name: Install Flameshot
+      become: yes
+      package:
+        name: flameshot
+        state: present
+    - name: Enable Flathub repository
+      become: yes
+      command: flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
+    - name: Install Fractal
+      become: yes
+      command: flatpak install --assumeyes flathub org.gnome.Fractal
+    - name: Install Spotify
+      become: yes
+      command: flatpak install --assumeyes flathub com.spotify.Client
+    - name: Install liferea
+      become: yes
+      package: 
+        name: liferea
+        state: present
+    - name: Install Asciidoctor
+      become: yes
+      package:
+        name: asciidoctor
+        state: present
+    - name: Install snapd
+      become: yes
+      package:
+        name: snapd
+        state: present    
+    - name: Install gimp
+      become: yes
+      package:
+        name: gimp
+        state: present
+    - name: Install Steam
+      become: yes
+      package:
+        name: steam
+        state: present
+    - name: Install Discord
+      become: yes
+      package:
+        name: discord
+        state: present
+    - name: Install VLC
+      become: yes
+      package:
+        name: vlc
+        state: present
+    - name: Install hexchat
+      become: yes
+      package:
+        name: hexchat
+        state: present
+    - name: Install HandBrake
+      become: yes
+      package: 
+        name: HandBrake
+        state: present
+    - name: Install vym
+      become: yes
+      package:
+        name: vym
+        state: present   
