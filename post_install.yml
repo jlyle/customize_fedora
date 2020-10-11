@@ -83,4 +83,26 @@
       become: yes
       package:
         name: vym
-        state: present   
+        state: present
+    - name: Install wine
+      become: yes
+      package:
+        name: wine
+        state: latest
+    - name: Install Git and prereqs
+      become: yes
+      dnf:
+        name:
+          - qt5-devel 
+          - gcc-c++ 
+          - git 
+          - qt5-qtbase-devel 
+          - qt5-linguist
+        state: latest
+    - name: Install the latest version of Apache and MariaDB
+      become: yes
+      dnf:
+        name:
+        - httpd
+        - mariadb-server
+        state: latest
