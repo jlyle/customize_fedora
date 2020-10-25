@@ -7,70 +7,85 @@
       package:
         name: rhythmbox
         state: absent
+   
     - name: Install GNOME Music
       become: yes
       package:
         name: gnome-music
         state: present
+    
     - name: Remove Shotwell
       become: yes
       package:
         name: shotwell
         state: absent
+    
     - name: Install Flameshot
       become: yes
       package:
         name: flameshot
         state: present
+    
     - name: Enable Flathub repository
       become: yes
       command: flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
+    
     - name: Install Fractal
       become: yes
       command: flatpak install --assumeyes flathub org.gnome.Fractal
+    
     - name: Install Spotify
       become: yes
       command: flatpak install --assumeyes flathub com.spotify.Clien
+    
     - name: Install Asciidoctor
       become: yes
       package:
         name: asciidoctor
         state: present
+    
     - name: Install gimp
       become: yes
       package:
         name: gimp
         state: present
+    
     - name: Install Discord
       become: yes
       package:
         name: discord
         state: present
+    
     - name: Install VLC
       become: yes
       package:
         name: vlc
         state: present
+    
     - name: Install hexchat
       become: yes
       package:
         name: hexchat
         state: present
+    
     - name: Install HandBrake
       become: yes
       package: 
         name: HandBrake
         state: present
+    
     - name: Install vym
       become: yes
       package:
         name: vym
         state: present
+    
     - name: Install wine
       become: yes
       package:
         name: wine
         state: latest
+    
     - name: Install Git and prereqs
       become: yes
       dnf:
@@ -88,11 +103,11 @@
         - httpd
         - mariadb-server
         state: latest        
-   - name: Start service httpd, if not started
-     service:
-       name: httpd
-       state: started
-   - name: Enable service httpd, and not touch the state
-     service:
-      name: httpd
-      enabled: yes
+    - name: Start service httpd, if not started
+      service:
+        name: httpd
+        state: started
+    - name: Enable service httpd, and not touch the state
+      service:
+        name: httpd
+        enabled: yes
