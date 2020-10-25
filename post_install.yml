@@ -96,6 +96,7 @@
           - qt5-qtbase-devel 
           - qt5-linguist
         state: latest
+    
     - name: Install the latest version of Apache and MariaDB
       become: yes
       dnf:
@@ -103,10 +104,12 @@
         - httpd
         - mariadb-server
         state: latest        
+    
     - name: Start service httpd, if not started
       service:
         name: httpd
         state: started
+    
     - name: Enable service httpd, and not touch the state
       service:
         name: httpd
