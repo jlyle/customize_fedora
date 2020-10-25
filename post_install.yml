@@ -2,11 +2,6 @@
 
 - hosts: localhost
   tasks:
-    - name: Install Builder
-      become: yes
-      package:
-        name: gnome-builder
-        state: present   
     - name: Remove Rhythmbox
       become: yes
       package:
@@ -35,12 +30,7 @@
       command: flatpak install --assumeyes flathub org.gnome.Fractal
     - name: Install Spotify
       become: yes
-      command: flatpak install --assumeyes flathub com.spotify.Client
-    - name: Install liferea
-      become: yes
-      package: 
-        name: liferea
-        state: present
+      command: flatpak install --assumeyes flathub com.spotify.Clien
     - name: Install Asciidoctor
       become: yes
       package:
@@ -97,4 +87,12 @@
         name:
         - httpd
         - mariadb-server
-        state: latest
+        state: latest        
+   - name: Start service httpd, if not started
+     service:
+       name: httpd
+       state: started
+   - name: Enable service httpd, and not touch the state
+     service:
+      name: httpd
+      enabled: yes
