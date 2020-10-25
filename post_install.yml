@@ -46,20 +46,10 @@
       package:
         name: asciidoctor
         state: present
-    - name: Install snapd
-      become: yes
-      package:
-        name: snapd
-        state: present    
     - name: Install gimp
       become: yes
       package:
         name: gimp
-        state: present
-    - name: Install Steam
-      become: yes
-      package:
-        name: steam
         state: present
     - name: Install Discord
       become: yes
