@@ -106,11 +106,13 @@
         state: latest        
     
     - name: Start service httpd, if not started
+      become: yes
       service:
         name: httpd
         state: started
     
     - name: Enable service httpd, and not touch the state
+      become: yes
       service:
         name: httpd
         enabled: yes
