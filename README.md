@@ -2,4 +2,4 @@
 Ansible Playbook for new laptops
 
 
-So I got a new laptop from work, and wanted to write a ansible playbook to install/configure all the software I needed to install.
+So I got a new laptop from work, and wanted to write a ansible playbook to install/configure all the software I needed/wanted to install.  This has a depemdencacy on ansbile (dih)
