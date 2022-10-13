@@ -1,5 +1,4 @@
-## Fedora 33 
-## modified 4/16/22 for fc33 release
+## 10/13/22 Updated for Fedora 37
 
 - hosts: localhost
   tasks:
