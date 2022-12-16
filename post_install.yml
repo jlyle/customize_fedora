@@ -1,118 +1,168 @@
 ## 10/13/22 Updated for Fedora 37
+## Just a little playbook to make building a new PC easier
 
 - hosts: localhost
+  become: true
   tasks:
-    - name: Remove Rhythmbox
-      become: yes
+  
+  name: Enable EPEL repository
+    dnf:
+      repo: epel
+      state: present
+
+  name: Install dependencies for CRC
       package:
-        name: rhythmbox
-        state: absent
-   
-    - name: Install GNOME Music
-      become: yes
-      package:
-        name: gnome-music
-        state: present
-    
-    - name: Remove Shotwell
-      become: yes
-      package:
-        name: shotwell
-        state: absent
-    
-    - name: Install Flameshot
-      become: yes
-      package:
-        name: flameshot
-        state: present
-    
-    - name: Enable Flathub repository
-      become: yes
-      command: flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
-    
-    - name: Install Fractal
-      become: yes
-      command: flatpak install --assumeyes flathub org.gnome.Fractal
-    
-    - name: Install Spotify
-      become: yes
-      command: flatpak install --assumeyes flathub com.spotify.Clien
-    
-    - name: Install Asciidoctor
-      become: yes
-      package:
-        name: asciidoctor
-        state: present
-    
-    - name: Install gimp
-      become: yes
-      package:
-        name: gimp
-        state: present
-    
-    - name: Install Discord
-      become: yes
-      package:
-        name: discord
-        state: present
-    
-    - name: Install VLC
-      become: yes
-      package:
-        name: vlc
-        state: present
-    
-    - name: Install hexchat
-      become: yes
-      package:
-        name: hexchat
-        state: present
-    
-    - name: Install HandBrake
-      become: yes
-      package: 
-        name: HandBrake
-        state: present
-    
-    - name: Install vym
-      become: yes
-      package:
-        name: vym
-        state: present
-    
-    - name: Install wine
-      become: yes
-      package:
-        name: wine
-        state: latest
-    
-    - name: Install Git and prereqs
-      become: yes
-      dnf:
         name:
-          - qt5-devel 
-          - gcc-c++ 
-          - git 
-          - qt5-qtbase-devel 
-          - qt5-linguist
-        state: latest
+          wget
+          tar
+          git
+          vim
+          net-tools
+          bind-utils
+          iptables-services
+          bridge-utils
+          bash-completion
+          kexec-tools
+          sos
+          psacct
+          httpd-tools
+  state: present
+
+    name: Download CRC installer
+      command: wget https://mirror.openshift.com/pub/openshift-v4/clients/crc/latest/crc-linux-amd64.tar.xz
+      creates: crc-linux-amd64.tar.xz
     
-    - name: Install the latest version of Apache and MariaDB
-      become: yes
-      dnf:
-        name:
+    name: Extract CRC installer
+    unarchive:
+      src: crc-linux-amd64.tar.xz
+      dest: /usr/local/bin/
+      remote_src: yes
+        creates: /usr/local/bin/crc
+    
+  name: Set executable permission on CRC installer
+    file:
+      path: /usr/local/bin/crc
+      mode: 0755
+ 
+  name: Install Okular pdf reader
+    package:
+      name: okular
+      state: present
+
+  name: Install neofetch
+    package:
+      name: neofetch
+      state: present
+
+  name:  Install alligator RSS reader
+    package: 
+      name: alligator
+      state: present
+
+  name: add neofetch; create file and write a line into it
+    ansible.builtin.lineinfile:
+      path: /etc/profile.d/neofetch.sh
+      line: neofetch
+      create: yes    
+
+  name: Remove Rhythmbox
+    package:
+      name: rhythmbox
+      state: absent
+      
+  name: Remove Shotwell
+    package:
+      name: shotwell
+      state: absent
+    
+  name: Install Flameshot
+    package:
+      name: flameshot
+      state: present
+
+  name: Enable Flathub repository
+    command: flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
+    
+  name: Install Fractal
+    command: flatpak install --assumeyes flathub org.gnome.Fractal
+    
+  name: Install Spotify
+    command: flatpak install --assumeyes flathub com.spotify.Clien
+        
+  name: Install gimp
+    package:
+      name: gimp
+      state: present
+    
+  name: Install Discord
+    package:
+      name: discord
+      state: present
+    
+  name: Install VLC
+    package:
+      name: vlc
+      state: present
+    
+  name: Install hexchat
+    package:
+      name: hexchat
+      state: present
+    
+  name: Install HandBrake
+    package: 
+      name: HandBrake
+      state: present
+    
+  name: Install vym
+    package:
+      name: vym
+      state: present
+    
+  name: Install wine
+    package:
+      name: wine
+      state: latest
+    
+  name: Install the latest version of Apache and MariaDB
+    dnf:
+      name:
         - httpd
         - mariadb-server
-        state: latest        
+      state: latest        
     
-    - name: Start service httpd, if not started
-      become: yes
-      service:
-        name: httpd
-        state: started
-    
-    - name: Enable service httpd, and not touch the state
-      become: yes
-      service:
-        name: httpd
-        enabled: yes
+  name: Start service httpd, if not started
+    service:
+      name: httpd
+      state: started
+
+  name: Enable service httpd, and not touch the state
+    become: yes
+    service:
+      name: httpd---
+  
+  name: Install packages required to download Visual Studio Code
+    dnf:
+      name: ['dnf-plugins-core', 'curl']
+      state: present
+ 
+  name: Add Microsoft signing key
+    rpm_key:
+      key: https://packages.microsoft.com/keys/microsoft.asc
+      state: present
+ 
+  name: Add Visual Studio Code repository
+    dnf_repository:
+      name: vscode
+      baseurl: "https://packages.microsoft.com/yumrepos/vscode"
+      gpgcheck: 1
+      gpgkey: "https://packages.microsoft.com/keys/microsoft.asc"
+      enabled: 1
+      state: present
+
+  name: Install Visual Studio Code
+    dnf:
+      name: code
+      state: present
+      enabled: yes
+
