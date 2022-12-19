@@ -1,168 +1,70 @@
 ## 10/13/22 Updated for Fedora 37
-## Just a little playbook to make building a new PC easier
+---
 
-- hosts: localhost
+- name: Install software packages on Fedora 37
+  hosts: all
   become: true
   tasks:
-  
-  name: Enable EPEL repository
-    dnf:
-      repo: epel
-      state: present
-
-  name: Install dependencies for CRC
-      package:
-        name:
-          wget
-          tar
-          git
-          vim
-          net-tools
-          bind-utils
-          iptables-services
-          bridge-utils
-          bash-completion
-          kexec-tools
-          sos
-          psacct
-          httpd-tools
-  state: present
-
-    name: Download CRC installer
-      command: wget https://mirror.openshift.com/pub/openshift-v4/clients/crc/latest/crc-linux-amd64.tar.xz
-      creates: crc-linux-amd64.tar.xz
-    
-    name: Extract CRC installer
-    unarchive:
-      src: crc-linux-amd64.tar.xz
-      dest: /usr/local/bin/
-      remote_src: yes
-        creates: /usr/local/bin/crc
-    
-  name: Set executable permission on CRC installer
-    file:
-      path: /usr/local/bin/crc
-      mode: 0755
- 
-  name: Install Okular pdf reader
+  - name: Install packages
     package:
-      name: okular
-      state: present
-
-  name: Install neofetch
-    package:
-      name: neofetch
-      state: present
-
-  name:  Install alligator RSS reader
-    package: 
-      name: alligator
-      state: present
-
-  name: add neofetch; create file and write a line into it
-    ansible.builtin.lineinfile:
-      path: /etc/profile.d/neofetch.sh
-      line: neofetch
-      create: yes    
-
-  name: Remove Rhythmbox
-    package:
-      name: rhythmbox
-      state: absent
-      
-  name: Remove Shotwell
-    package:
-      name: shotwell
-      state: absent
-    
-  name: Install Flameshot
-    package:
-      name: flameshot
-      state: present
-
-  name: Enable Flathub repository
-    command: flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
-    
-  name: Install Fractal
-    command: flatpak install --assumeyes flathub org.gnome.Fractal
-    
-  name: Install Spotify
-    command: flatpak install --assumeyes flathub com.spotify.Clien
-        
-  name: Install gimp
-    package:
-      name: gimp
-      state: present
-    
-  name: Install Discord
-    package:
-      name: discord
-      state: present
-    
-  name: Install VLC
-    package:
-      name: vlc
-      state: present
-    
-  name: Install hexchat
-    package:
-      name: hexchat
-      state: present
-    
-  name: Install HandBrake
-    package: 
-      name: HandBrake
-      state: present
-    
-  name: Install vym
-    package:
-      name: vym
-      state: present
-    
-  name: Install wine
-    package:
-      name: wine
-      state: latest
-    
-  name: Install the latest version of Apache and MariaDB
-    dnf:
       name:
+        - gimp
+        - neofetch
+        - alligator
+        - okular
+        - neofetch
+        - flameshot
+        - wine
         - httpd
         - mariadb-server
-      state: latest        
-    
-  name: Start service httpd, if not started
-    service:
-      name: httpd
-      state: started
+        - git
+      state: latest
 
-  name: Enable service httpd, and not touch the state
-    become: yes
-    service:
-      name: httpd---
-  
-  name: Install packages required to download Visual Studio Code
-    dnf:
-      name: ['dnf-plugins-core', 'curl']
-      state: present
- 
-  name: Add Microsoft signing key
-    rpm_key:
-      key: https://packages.microsoft.com/keys/microsoft.asc
-      state: present
- 
-  name: Add Visual Studio Code repository
+  - name: Remove packages
+    package:
+      name:
+        - rhythmbox
+        - shotwell
+      state: absent
+
+  - name: Add a line to a file if the file does not exist, without passing regexp
+    ansible.builtin.lineinfile:
+      path: /tmp/testfile
+      line: 192.168.1.99 foo.lab.net foo
+      create: yes
+
+  - name: Enable the Google Chrome repository
     dnf_repository:
-      name: vscode
-      baseurl: "https://packages.microsoft.com/yumrepos/vscode"
-      gpgcheck: 1
-      gpgkey: "https://packages.microsoft.com/keys/microsoft.asc"
-      enabled: 1
-      state: present
-
-  name: Install Visual Studio Code
-    dnf:
-      name: code
+      name: google-chrome
       state: present
       enabled: yes
+
+  - name: Install Chrome
+    package:
+      name: google-chrome-stable
+      state: latest
+
+  - name: Install Steam on Fedora 37
+    tasks:
+  - name: Install dependencies
+    package:
+      name:
+        - libtxc_dxtn
+        - libglvnd-opengl
+        - libglvnd-glx
+        - libglvnd-egl
+      state: latest
+
+  - name: Download and install Steam
+    get_url:
+      url: https://steamcdn-a.akamaihd.net/client/installer/steam.sh
+      dest: /tmp/steam.sh
+      mode: 0755
+    script: /tmp/steam.sh
+
+
+  
+
+
+
 
