@@ -11,4 +11,4 @@ Then its just a simple matter of grabbing the file in your choice of methods and
 
     # ansible-playbook post_install.yml --ask-become-pass
 
-You could also encrypt your password, but thats not covered here
+You could also encrypt your password, but thats not covered here  

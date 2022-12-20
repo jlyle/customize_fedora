@@ -12,7 +12,6 @@
         - neofetch
         - alligator
         - okular
-        - neofetch
         - flameshot
         - wine
         - httpd
@@ -42,17 +41,17 @@
   - name: Install Chrome
     package:
       name: google-chrome-stable
-      state: latest
+        state: latest
 
   - name: Install Steam on Fedora 37
     tasks:
-  - name: Install dependencies
-    package:
-      name:
-        - libtxc_dxtn
-        - libglvnd-opengl
-        - libglvnd-glx
-        - libglvnd-egl
+    - name: Install dependencies
+      package:
+        name:
+          - libtxc_dxtn
+          - libglvnd-opengl
+          - libglvnd-glx
+          - libglvnd-egl
       state: latest
 
   - name: Download and install Steam
