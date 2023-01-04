@@ -1,69 +1,75 @@
 ## 12/20/22 Updated for Fedora 37
 ---
-
 - name: Install software packages on Fedora 37
   hosts: all
-  become: true
+  become: yes
   tasks:
-  - name: Install packages
-    package:
-      name:
-        - gimp
-        - neofetch
-        - alligator
-        - okular
-        - flameshot
-        - wine
-        - httpd
-        - mariadb-server
-        - git
-      state: latest
-
-  - name: Remove packages
-    package:
-      name:
-        - rhythmbox
-        - shotwell
-      state: absent
-
-  - name: Add a line to a file if the file does not exist, without passing regexp
-    ansible.builtin.lineinfile:
-      path: /tmp/testfile
-      line: 192.168.1.99 foo.lab.net foo
-      create: yes
-
-  - name: Enable the Google Chrome repository
-    dnf_repository:
-      name: google-chrome
-      state: present
-      enabled: yes
-
-  - name: Install Chrome
-    package:
-      name: google-chrome-stable
-        state: latest
-
-  - name: Install Steam on Fedora 37
-    tasks:
-    - name: Install dependencies
+    - name: Install packages
       package:
         name:
-          - libtxc_dxtn
-          - libglvnd-opengl
-          - libglvnd-glx
-          - libglvnd-egl
-      state: latest
+          - gimp
+          - neofetch
+          - alligatorx
+          - okular
+          - flameshot
+          - wine
+          - httpd
+          - mariadb-server
+          - git
+        state: latest
 
-  - name: Download and install Steam
-    get_url:
-      url: https://steamcdn-a.akamaihd.net/client/installer/steam.sh
-      dest: /tmp/steam.sh
-      mode: 0755
-    script: /tmp/steam.sh
+    - name: Remove packages
+      package:
+        name:
+          - rhythmbox
+          - shotwell
+        state: absent
 
+    - name: Add a line to a file if the file does not exist, without passing regexp
+      ansible.builtin.lineinfile:
+        path: /tmp/testfile
+        line: 192.168.1.99 foo.lab.net foo
+        create: yes
+
+    - name: Import Google Chrome repository signing key
+      dnf_key:
+        name: google-chrome
+        state: present
+        key_url: https://dl-ssl.google.com/linux/linux_signing_key.pub
+
+    - name: Add Google Chrome repository
+      dnf_repository:
+        name: google-chrome
+        description: Google Chrome
+        baseurl: http://dl.google.com/linux/chrome/rpm/stable/$basearch
+        enabled: yes
+        gpgcheck: yes
+        gpgkey: https://dl-ssl.google.com/linux/linux_signing_key.pub
+        state: present
+
+    - name: Install Google Chrome
+      dnf:
+        name: google-chrome-stable
+        state: present
 
   
 
+    - name: Install Steam on FC 37
+      tasks:
+        - name: Install dependencies
+          package:
+            name:
+              - libtxc_dxtn
+              - libglvnd-opengl
+              - libglvnd-glx
+              - libglvnd-egl
+          state: latest
 
+    - name: Download and install Steam
+      get_url:
+        url: https://steamcdn-a.akamaihd.net/client/installer/steam.sh
+        dest: /tmp/steam.sh
+        mode: 0755
+      script: /tmp/steam.shell
 
-
+  
