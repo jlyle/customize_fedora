@@ -1,6 +1,6 @@
 ## 12/20/22 Updated for Fedora 37
 ---
-- name: Install software packages on Fedora 37
+- name: Install software packages on Fedora 38
   hosts: all
   become: yes
   tasks:
@@ -54,7 +54,7 @@
 
   
 
-    - name: Install Steam on FC 37
+    - name: Install Steam on FC 38
       tasks:
         - name: Install dependencies
           package:
