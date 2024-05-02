@@ -10,14 +10,14 @@
     ansible.builtin.command: echo -e "[code]\nname=Visual Studio Code\nbaseurl=https://packages.microsoft.com/yumrepos/vscode\nenabled=1\ngpgcheck=1\ngpgkey=https://packages.microsoft.com/keys/microsoft.asc" > /etc/yum.repos.d/vscode.repo'
   
   - name: Upgrade all packages
-   ansible.builtin.dnf:
+     ansible.builtin.dnf:
     name: "*"
     state: latest
  
   - name: install vscode
      ansible.builtin.dnf:
-       name: code
-       state: latest
+      name: code
+      state: latest
 
 - name: Install software packages on Fedora 40
   hosts: all
