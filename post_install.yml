@@ -1,6 +1,25 @@
-## 12/20/22 Updated for Fedora 38
+## updated 05/20/24 Updated for Fedora 40
 ---
-- name: Install software packages on Fedora 38
+
+ - name: Import vscode key
+  ansible.builtin.rpm_key:
+    state: present
+    key: https://packages.microsoft.com/keys/microsoft.asc  
+
+ - name: create repo for vscode
+    ansible.builtin.command: echo -e "[code]\nname=Visual Studio Code\nbaseurl=https://packages.microsoft.com/yumrepos/vscode\nenabled=1\ngpgcheck=1\ngpgkey=https://packages.microsoft.com/keys/microsoft.asc" > /etc/yum.repos.d/vscode.repo'
+  
+  - name: Upgrade all packages
+   ansible.builtin.dnf:
+    name: "*"
+    state: latest
+ 
+  - name: install vscode
+     ansible.builtin.dnf:
+       name: code
+       state: latest
+
+- name: Install software packages on Fedora 40
   hosts: all
   become: yes
   tasks:
@@ -21,40 +40,13 @@
     - name: Remove packages
       package:
         name:
+
           - rhythmbox
           - shotwell
         state: absent
 
-    - name: Add a line to a file if the file does not exist, without passing regexp
-      ansible.builtin.lineinfile:
-        path: /tmp/testfile
-        line: 192.168.1.99 foo.lab.net foo
-        create: yes
-
-    - name: Import Google Chrome repository signing key
-      dnf_key:
-        name: google-chrome
-        state: present
-        key_url: https://dl-ssl.google.com/linux/linux_signing_key.pub
-
-    - name: Add Google Chrome repository
-      dnf_repository:
-        name: google-chrome
-        description: Google Chrome
-        baseurl: http://dl.google.com/linux/chrome/rpm/stable/$basearch
-        enabled: yes
-        gpgcheck: yes
-        gpgkey: https://dl-ssl.google.com/linux/linux_signing_key.pub
-        state: present
-
-    - name: Install Google Chrome
-      dnf:
-        name: google-chrome-stable
-        state: present
-
   
-
-    - name: Install Steam on FC 38
+    - name: Install Steam on FC 40
       tasks:
         - name: Install dependencies
           package:
@@ -71,5 +63,7 @@
         dest: /tmp/steam.sh
         mode: 0755
       script: /tmp/steam.shell
+
+
 
   
