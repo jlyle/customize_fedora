@@ -1,6 +1,7 @@
 #updated 12/14/22
 
-Just a little ansible playbook to configure my laptop
+Just a little ansible playbook to configure my laptop.
+
 
 I **couldn't** get the rpmfusion database to install, working on that, but in the meantime you can do the following **prior** to running the playbook
 

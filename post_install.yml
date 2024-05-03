@@ -19,13 +19,7 @@
     - name: add fedora epel repo
       become: true
       become_user: root
-      shell: dnf install -y https://dl.fedoraproject.org/pub/epel/epel-release-latest-8.noarch.rpm
-      ignore_errors: yes
-
-    - name: add fedora rpmfusion repo
-      become: true
-      become_user: root
-      shell: dnf install -y https://download1.rpmfusion.org/free/el/rpmfusion-free-release-8.noarch.rpm https://download1.rpmfusion.org/nonfree/el/rpmfusion-nonfree-release-8.noarch.rpm
+      shell: dnf install -y https://download1.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-$(rpm -E %fedora).noarch.rpm
       ignore_errors: yes
 
     - name: get vscode key
