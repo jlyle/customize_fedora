@@ -17,9 +17,41 @@
           - git
           - vlc
 
-  
-    - name: enable and start services
-      
+    - name: add fedora epel repo
+      become: true
+      become_user: root
+      shell: dnf install -y https://dl.fedoraproject.org/pub/epel/epel-release-latest-8.noarch.rpm
+      ignore_errors: yes
+
+    - name: add fedora rpmfusion repo
+      become: true
+      become_user: root
+      shell: dnf install -y https://download1.rpmfusion.org/free/el/rpmfusion-free-release-8.noarch.rpm https://download1.rpmfusion.org/nonfree/el/rpmfusion-nonfree-release-8.noarch.rpm
+      ignore_errors: yes
+
+    - name: get vscode key
+      become: true
+      become_user: root
+      shell: rpm --import https://packages.microsoft.com/keys/microsoft.asc
+      ignore_errors: yes
+
+    - name: add vscode repo to dnf
+      become: true
+      become_user: root
+      shell: dnf config-manager --add-repo https://packages.microsoft.com/yumrepos/vscode
+      ignore_errors: yes
+
+    - name: install vscode  
+      become: true
+      become_user: root
+      dnf:
+        state: present
+        name: code 
+        
+
+
+
+
 
 
       
