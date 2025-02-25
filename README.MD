@@ -1,16 +1,83 @@
-#updated 12/14/22
+---
+- name: Install Essential Tools on Fedora 41 KDE
+  hosts: localhost
+  become: yes
 
-Just a little ansible playbook to configure my laptop.
+  tasks:
+    - name: Ensure DNF is updated
+      dnf:
+        name: dnf
+        state: latest
 
+    - name: Enable RPM Fusion Free and Non-Free Repositories
+      command: >
+        dnf install -y \
+        https://download1.rpmfusion.org/free/fedora/rpmfusion-free-release-41.noarch.rpm \
+        https://download1.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-41.noarch.rpm
+      args:
+        warn: false
+      changed_when: true
 
-I **couldn't** get the rpmfusion database to install, working on that, but in the meantime you can do the following **prior** to running the playbook
+    - name: Enable EPEL Repository
+      dnf:
+        name: epel-release
+        state: present
+        update_cache: yes
 
-    # sudo dnf install https://download1.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-$(rpm -E %fedora).noarch.rpm
+    - name: Add Microsoft VS Code repository
+      command: >
+        rpm --import https://packages.microsoft.com/keys/microsoft.asc && \
+        sh -c 'echo -e "[code]\nname=Visual Studio Code\nbaseurl=https://packages.microsoft.com/yumrepos/vscode\nenabled=1\ngpgcheck=1\ngpgkey=https://packages.microsoft.com/keys/microsoft.asc" > /etc/yum.repos.d/vscode.repo'
+      args:
+        warn: false
+      changed_when: true
 
-    # sudo dnf update
+    - name: Install essential tools
+      dnf:
+        name:
+          - neovim           # Vim-based text editor
+          - git              # Version control system
+          - htop             # Interactive process viewer
+          - btop             # Modern system monitoring tool
+          - tmux             # Terminal multiplexer
+          - fish             # Alternative shell
+          - curl             # Command-line URL transfer tool
+          - wget             # Network downloader
+          - ripgrep          # Fast grep alternative
+          - fzf              # Fuzzy finder
+          - code             # Microsoft Visual Studio Code
+          - gimp             # GNU Image Manipulation Program
+          - fastfetch        # System information tool
+          - vlc              # Multimedia player
+          - ffmpeg           # Multimedia framework
+          - audacity         # Audio editing tool
+          - obs-studio       # Video recording and streaming
+          - kdenlive         # Video editing software
+          - dolphin          # KDE file manager
+          - konsole          # KDE terminal emulator
+          - okular           # KDE document viewer
+          - gwenview         # KDE image viewer
+          - kate             # KDE text editor
+          - rtorrent         # Command-line BitTorrent client
+          - steam            # Gaming platform
+          - libreoffice      # Office suite
+          - thunderbird      # Email client
+        state: present
+        update_cache: yes
 
-Then its just a simple matter of grabbing the file in your choice of methods and running the playbook
+    - name: Add fastfetch command to ~/.bashrc
+      lineinfile:
+        path: ~/.bashrc
+        line: "fastfetch"
+        create: yes
 
-    # ansible-playbook post_install.yml --ask-become-pass
+    - name: Set vi as default editor in ~/.bashrc
+      lineinfile:
+        path: ~/.bashrc
+        line: "export EDITOR=vi"
+        create: yes
 
-You could also encrypt your password, but thats not covered here  
+    - name: Clean up DNF metadata
+      command: dnf clean all
+      changed_when: false
+
