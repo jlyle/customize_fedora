@@ -3,11 +3,11 @@
   hosts: localhost
   become: yes
   
-    - name: Enable EPEL Repository
-      dnf:
-        name: epel-release
-        state: present
-        update_cache: yes
+#    - name: Enable EPEL Repository
+#      dnf:
+#       name: epel-release
+#      state: present
+#        update_cache: yes
 
 #    - name: Add Microsoft VS Code repository
 #      command: >
