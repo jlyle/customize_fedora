@@ -2,11 +2,13 @@
 - name: Install Essential Tools on Fedora 41 KDE
   hosts: localhost
   become: yes
-  
+
+  tasks:
+
 #    - name: Enable EPEL Repository
 #      dnf:
-#       name: epel-release
-#      state: present
+#        name: epel-release
+#        state: present
 #        update_cache: yes
 
 #    - name: Add Microsoft VS Code repository
@@ -22,15 +24,10 @@
         name:
           - neovim           # Vim-based text editor
           - git              # Version control system
-          - htop             # Interactive process viewer
-          - btop             # Modern system monitoring tool
           - tmux             # Terminal multiplexer
-          - fish             # Alternative shell
-          - curl             # Command-line URL transfer tool
-          - wget             # Network downloader
+          - btop             # Modern system monitoring tool
           - ripgrep          # Fast grep alternative
           - fzf              # Fuzzy finder
-          - code             # Microsoft Visual Studio Code
           - gimp             # GNU Image Manipulation Program
           - fastfetch        # System information tool
           - vlc              # Multimedia player
@@ -39,14 +36,9 @@
           - obs-studio       # Video recording and streaming
           - kdenlive         # Video editing software
           - dolphin          # KDE file manager
-          - konsole          # KDE terminal emulator
-          - okular           # KDE document viewer
-          - gwenview         # KDE image viewer
-          - kate             # KDE text editor
           - rtorrent         # Command-line BitTorrent client
           - steam            # Gaming platform
           - libreoffice      # Office suite
-          - thunderbird      # Email client
         state: present
         update_cache: yes
 
@@ -65,3 +57,4 @@
     - name: Clean up DNF metadata
       command: dnf clean all
       changed_when: false
+
